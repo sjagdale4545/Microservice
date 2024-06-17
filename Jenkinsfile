@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Use Docker CLI tool to remove existing frontend image if it exists
-                    sh "docker rmi -f sjagdale616/frontend || true"
+                    sh "docker rmi -f sjagdale616/frontend2 || true"
                 }
             }
         }
@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t sjagdale616/frontend ."
+                        sh "docker build -t sjagdale616/frontend2 ."
                     }
                 }
             }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push sjagdale616/frontend"
+                        sh "docker push sjagdale616/frontend2"
                     }
                 }
             }
