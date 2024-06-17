@@ -15,6 +15,14 @@ pipeline {
                 sh "kubectl get svc -n webapps"
                 }
             }
+         stage('Trigger Main Branch') {
+            steps {
+                script {
+                    // Trigger the main branch build
+                    build job: 'multibranch-pipeline-job/main'
+                }
+            }
+        }
         }
     }
 }
