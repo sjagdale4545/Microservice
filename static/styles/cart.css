@@ -44,7 +44,7 @@
 }
 
 .empty-cart-section a:hover {
-    color: white;
+    color: red;
     text-decoration: none;
 }
 
