@@ -26,5 +26,6 @@ pipeline {
                     env.BRANCH_NAME == 'main'
                 }
             }
+         }
     }
 }
