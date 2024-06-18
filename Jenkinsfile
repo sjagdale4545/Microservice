@@ -18,13 +18,11 @@ pipeline {
                     
                     IMAGE_TAG = "${env.BUILD_NUMBER}"
                     // Build and push the Docker image
-                        {
                             sh """
                         docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} .
                         docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
                     """
                 }
-            }
             }
         }
     }
