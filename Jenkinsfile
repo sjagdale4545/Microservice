@@ -2,40 +2,42 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'sjagdale616/frontend'
-        DOCKER_TAG = 'latest'
-        DOCKER_CREDENTIALS_ID = 'docker-cred'
-        DOCKER_TOOL = 'docker'
+        // Define Docker registry and image details
+        //withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker')
+        //DOCKER_REGISTRY = 'your-docker-registry'
+        IMAGE_NAME = 'sjagdale616/frontend'
     }
 
     stages {
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID, toolName: DOCKER_TOOL) {
-                        docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                    }
+                    // Get a unique tag using the Jenkins build number
+                    {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker')
+                    
+                    IMAGE_TAG = "${env.BUILD_NUMBER}"
+                    // Build and push the Docker image
+                        {
+                            sh """
+                        docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} .
+                        docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+                    """
                 }
             }
-        }
-        
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID, toolName: DOCKER_TOOL) {
-                        sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    }
-                }
             }
         }
     }
 
-    post {
-        success {
-            echo 'Docker image successfully built and pushed!'
-        }
-        failure {
-            echo 'There was a failure in the pipeline.'
+        stage('Deploy') {
+            steps {
+                script {
+                    // Update the Kubernetes deployment with the new image tag
+                    sh """
+                        kubectl set image deployment/frontend server=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} --record
+                    """
+                }
+            }
         }
     }
 }
