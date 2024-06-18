@@ -7,8 +7,7 @@ pipeline {
                 script {
                     def dockerHubUsername = 'sjagdale616'
                     def dockerHubRepository = 'frontend'
-                    credentialsId: 'docker-cred'
-                    //def dockerHubToken = 'dckr_pat_MPhIUa80Tx-HWPgA8cB1W4gvGF0'
+                    def dockerHubToken = 'dckr_pat_MPhIUa80Tx-HWPgA8cB1W4gvGF0'
 
                     sh """
                     curl -s -X DELETE -H "Authorization: JWT ${credentialsId}" \
