@@ -10,7 +10,7 @@ pipeline {
                     def dockerHubToken = 'dckr_pat_MPhIUa80Tx-HWPgA8cB1W4gvGF0'
 
                     sh """
-                    curl -s -X DELETE -H "Authorization: JWT ${dockerHubToken}" \
+                    curl -s -X DELETE -H "Authorization: JWT ${dockerHubToken}" \ 
                         https://hub.docker.com/v2/repositories/${dockerHubUsername}/${dockerHubRepository}/tags/latest/
                     """
                 }
