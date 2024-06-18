@@ -16,8 +16,9 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    // Build the Docker image
-                    docker.build('sjagdale616/frontend:latest', '.')
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker build -t sjagdale616/frontend:latest ."
+                    }
                 }
             }
         }
@@ -25,8 +26,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Push the Docker image to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                         sh "docker push sjagdale616/frontend:latest"
                     }
                 }
