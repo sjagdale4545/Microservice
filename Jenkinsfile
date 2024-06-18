@@ -5,14 +5,10 @@ pipeline {
         stage('Delete Docker Image from Docker Hub') {
             steps {
                 script {
-                    def dockerHubUsername = 'sjagdale616'
-                    def dockerHubRepository = 'frontend'
-                    def dockerHubToken = 'dckr_pat_MPhIUa80Tx-HWPgA8cB1W4gvGF0'
-
-                    sh """
-                    curl -s -X DELETE -H "Authorization: JWT ${credentialsId}" \
-                        https://hub.docker.com/v2/repositories/${dockerHubUsername}/${dockerHubRepository}/tags/latest/
-                    """
+                    // Remove the existing Docker image from Docker Hub
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
+                        sh "docker rmi sjagdale616/frontend:latest"
+                    }
                 }
             }
         }
@@ -20,9 +16,8 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t sjagdale616/frontend:latest ."
-                    }
+                    // Build the Docker image
+                    docker.build('sjagdale616/frontend:latest', '.')
                 }
             }
         }
@@ -30,7 +25,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                    // Push the Docker image to Docker Hub
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
                         sh "docker push sjagdale616/frontend:latest"
                     }
                 }
