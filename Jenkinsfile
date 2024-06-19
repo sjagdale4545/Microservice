@@ -26,5 +26,11 @@ pipeline {
                 }
             }
         }
+        post {
+        always {
+            // Trigger the main branch pipeline
+            build job: 'main'
+        }
+    }
     }
 }
