@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'sjagdale616/frontend'
-        DOCKER_TAG = 'latest'
+        DOCKER_TAG = 'latest2'
     }
 
     stages {
