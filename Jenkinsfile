@@ -27,11 +27,16 @@ pipeline {
             }
         }
     }
-        post {
+    
+    post {
         always {
-            // Trigger the main branch pipeline
-            build job: 'main'
+            script {
+                try {
+                    build job: 'main', wait: false
+                } catch (Exception e) {
+                    echo "Failed to trigger 'main' job: ${e.getMessage()}"
+                }
+            }
         }
-    }
     }
 }
