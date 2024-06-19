@@ -196,13 +196,11 @@ spec:
         app: frontend
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
-        kubernetes.io/change-cause: "Force redeploy to pull latest image"
     spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: sjagdale616/frontend:frontend
-          imagePullPolicy: Always
+          image: sjagdale616/frontend:latest
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -238,8 +236,16 @@ spec:
             value: "checkoutservice:5050"
           - name: AD_SERVICE_ADDR
             value: "adservice:9555"
+          # # ENV_PLATFORM: One of: local, gcp, aws, azure, onprem, alibaba
+          # # When not set, defaults to "local" unless running in GKE, otherwies auto-sets to gcp
+          # - name: ENV_PLATFORM
+          #   value: "aws"
           - name: ENABLE_PROFILER
             value: "0"
+          # - name: CYMBAL_BRANDING
+          #   value: "true"
+          # - name: FRONTEND_MESSAGE
+          #   value: "Replace this with a message you want to display on all pages."
           resources:
             requests:
               cpu: 100m
