@@ -200,7 +200,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: sjagdale616/frontend
+          image: sjagdale616/frontend:frontend
           imagePullPolicy: Always
           ports:
           - containerPort: 8080
