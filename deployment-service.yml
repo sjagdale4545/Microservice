@@ -201,6 +201,7 @@ spec:
       containers:
         - name: server
           image: sjagdale616/frontend:latest
+          imagePullPolicy: Always
           ports:
           - containerPort: 8080
           readinessProbe:
